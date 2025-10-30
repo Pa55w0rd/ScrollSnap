@@ -644,6 +644,24 @@ function enableRegionSelector() {
   }
   window._regionSelectorActive = true;
   
+  // 创建自定义光标 SVG
+  const cursorSvg = `data:image/svg+xml;base64,${btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+      <!-- 黑色描边 -->
+      <line x1="16" y1="0" x2="16" y2="12" stroke="black" stroke-width="3"/>
+      <line x1="16" y1="20" x2="16" y2="32" stroke="black" stroke-width="3"/>
+      <line x1="0" y1="16" x2="12" y2="16" stroke="black" stroke-width="3"/>
+      <line x1="20" y1="16" x2="32" y2="16" stroke="black" stroke-width="3"/>
+      <!-- 白色十字 -->
+      <line x1="16" y1="0" x2="16" y2="12" stroke="white" stroke-width="2"/>
+      <line x1="16" y1="20" x2="16" y2="32" stroke="white" stroke-width="2"/>
+      <line x1="0" y1="16" x2="12" y2="16" stroke="white" stroke-width="2"/>
+      <line x1="20" y1="16" x2="32" y2="16" stroke="white" stroke-width="2"/>
+      <!-- 中心点 -->
+      <circle cx="16" cy="16" r="3" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+  `)}`;
+  
   // 创建遮罩层
   const overlay = document.createElement('div');
   overlay.id = 'screenshot-region-selector-overlay';
@@ -655,7 +673,7 @@ function enableRegionSelector() {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 2147483646;
-    cursor: crosshair;
+    cursor: url('${cursorSvg}') 16 16, crosshair;
   `;
   
   // 创建提示信息
@@ -690,24 +708,6 @@ function enableRegionSelector() {
   // 添加全局光标样式 - 使用自定义 SVG 光标，确保高对比度
   const cursorStyle = document.createElement('style');
   cursorStyle.id = 'screenshot-region-cursor-style';
-  // 创建带边框的十字光标 SVG，白色十字 + 黑色描边，确保在任何背景下都清晰可见
-  const cursorSvg = `data:image/svg+xml;base64,${btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-      <!-- 黑色描边 -->
-      <line x1="16" y1="0" x2="16" y2="12" stroke="black" stroke-width="3"/>
-      <line x1="16" y1="20" x2="16" y2="32" stroke="black" stroke-width="3"/>
-      <line x1="0" y1="16" x2="12" y2="16" stroke="black" stroke-width="3"/>
-      <line x1="20" y1="16" x2="32" y2="16" stroke="black" stroke-width="3"/>
-      <!-- 白色十字 -->
-      <line x1="16" y1="0" x2="16" y2="12" stroke="white" stroke-width="2"/>
-      <line x1="16" y1="20" x2="16" y2="32" stroke="white" stroke-width="2"/>
-      <line x1="0" y1="16" x2="12" y2="16" stroke="white" stroke-width="2"/>
-      <line x1="20" y1="16" x2="32" y2="16" stroke="white" stroke-width="2"/>
-      <!-- 中心点 -->
-      <circle cx="16" cy="16" r="3" fill="white" stroke="black" stroke-width="2"/>
-    </svg>
-  `)}`;
-  
   cursorStyle.textContent = `
     * {
       cursor: url('${cursorSvg}') 16 16, crosshair !important;
@@ -731,7 +731,7 @@ function enableRegionSelector() {
       if (isScrollable(scrollableParent, true)) {  // 启用调试模式
         scrollableParent.style.outline = '3px solid #2196F3';
         scrollableParent.style.outlineOffset = '2px';
-        scrollableParent.style.cursor = 'crosshair';
+        scrollableParent.style.cursor = `url('${cursorSvg}') 16 16, crosshair`;
         currentHighlighted = scrollableParent;
         
         // 更新提示信息
