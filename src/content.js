@@ -674,8 +674,8 @@ function enableRegionSelector() {
   const tooltip = document.createElement('div');
   tooltip.id = 'screenshot-region-selector-tooltip';
   tooltip.innerHTML = `
-    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 区域截图模式</div>
-    <div style="font-size: 14px;">移动鼠标找到可滚动区域，提示会变成"✅"</div>
+    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 滚动截图</div>
+    <div style="font-size: 14px;">移动鼠标到可滚动区域</div>
     <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">按 ESC 取消</div>
   `;
   tooltip.style.cssText = `
@@ -692,6 +692,19 @@ function enableRegionSelector() {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     text-align: center;
   `;
+  
+  // 创建高亮矩形框（在遮罩层上方绘制）
+  const highlightBox = document.createElement('div');
+  highlightBox.id = 'screenshot-region-highlight-box';
+  highlightBox.style.cssText = `
+    position: fixed;
+    border: 4px solid #00ff00;
+    box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #000, 0 0 20px #00ff00;
+    pointer-events: none;
+    z-index: 2147483647;
+    display: none;
+  `;
+  document.body.appendChild(highlightBox);
   
   document.body.appendChild(overlay);
   document.body.appendChild(tooltip);
@@ -728,21 +741,22 @@ function enableRegionSelector() {
     let scrollableParent = element;
     while (scrollableParent && scrollableParent !== document.body) {
       if (isScrollable(scrollableParent, true)) {  // 启用调试模式
-        // 使用 box-shadow 替代 outline，确保在遮罩层上方可见
-        scrollableParent.style.boxShadow = '0 0 0 4px #2196F3, inset 0 0 0 4px #2196F3';
-        scrollableParent.style.outline = '3px solid #2196F3';
-        scrollableParent.style.outlineOffset = '2px';
-        scrollableParent.style.position = 'relative';
-        scrollableParent.style.zIndex = '2147483647';
-        scrollableParent.style.cursor = `url('${cursorSvg}') 24 24, crosshair`;
         currentHighlighted = scrollableParent;
+        
+        // 获取元素位置并显示高亮框
+        const rect = scrollableParent.getBoundingClientRect();
+        highlightBox.style.display = 'block';
+        highlightBox.style.left = rect.left + 'px';
+        highlightBox.style.top = rect.top + 'px';
+        highlightBox.style.width = rect.width + 'px';
+        highlightBox.style.height = rect.height + 'px';
         
         // 更新提示信息
         const scrollInfo = scrollableParent.scrollHeight > scrollableParent.clientHeight 
           ? `内容高度 ${scrollableParent.scrollHeight}px` 
           : '可滚动区域';
         tooltip.innerHTML = `
-          <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">✅ 找到可滚动区域！</div>
+          <div style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">✅ 找到了！</div>
           <div style="font-size: 14px;">${scrollInfo}</div>
           <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">点击开始截图</div>
         `;
@@ -752,9 +766,12 @@ function enableRegionSelector() {
     }
     
     if (!scrollableParent || scrollableParent === document.body) {
+      // 隐藏高亮框
+      highlightBox.style.display = 'none';
+      
       tooltip.innerHTML = `
-        <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 区域截图模式</div>
-        <div style="font-size: 14px;">移动鼠标找到可滚动区域，提示会变成"✅"</div>
+        <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 滚动截图</div>
+        <div style="font-size: 14px;">移动鼠标到可滚动区域</div>
         <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">按 ESC 取消</div>
       `;
     }
@@ -856,6 +873,11 @@ function enableRegionSelector() {
     const styleEl = document.getElementById('screenshot-region-cursor-style');
     if (styleEl) {
       styleEl.remove();
+    }
+    
+    // 移除高亮框
+    if (highlightBox && highlightBox.parentNode) {
+      highlightBox.remove();
     }
     
     overlay.remove();
