@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/icons/icon.svg" alt="ScrollSnap Logo" width="128" height="128"/>
+<img src="assets/icons/icon-128.png" alt="ScrollSnap Logo" width="128" height="128"/>
 
 **Professional scrollable region screenshot solution - Perfect support for capturing complete scrollable containers**
 
@@ -149,7 +149,8 @@ Result: One complete product detail image for comparison and sharing
 ### 1. Popup Window
 
 <div align="center">
-<img src="docs/popup.png" alt="Extension Popup" width="300"/>
+<!-- Screenshots coming soon -->
+<!-- <img src="docs/popup.png" alt="Extension Popup" width="300"/> -->
 </div>
 
 *Click the extension icon to select mode and parameters.*
@@ -157,7 +158,8 @@ Result: One complete product detail image for comparison and sharing
 ### 2. Manual Selection Mode
 
 <div align="center">
-<img src="docs/manual-selection.png" alt="Manual Selection" width="600"/>
+<!-- Screenshots coming soon -->
+<!-- <img src="docs/manual-selection.png" alt="Manual Selection" width="600"/> -->
 </div>
 
 *Drag to select screenshot area with real-time size display.*
@@ -165,7 +167,8 @@ Result: One complete product detail image for comparison and sharing
 ### 3. Scrollable Region Detection
 
 <div align="center">
-<img src="docs/scrollable-region.png" alt="Scrollable Region" width="600"/>
+<!-- Screenshots coming soon -->
+<!-- <img src="docs/scrollable-region.png" alt="Scrollable Region" width="600"/> -->
 </div>
 
 *Auto-detect scrollable elements with blue highlight.*
@@ -191,9 +194,6 @@ Result: One complete product detail image for comparison and sharing
 
 3. Done! The extension icon will appear in the toolbar.
 
-### Method 2: Chrome Web Store (Coming Soon)
-
-*Chrome Web Store link will be published soon*
 
 ---
 

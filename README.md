@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/icons/icon.svg" alt="ScrollSnap Logo" width="128" height="128"/>
+<img src="assets/icons/icon-128.png" alt="ScrollSnap Logo" width="128" height="128"/>
 
 **专业的滚动区域截图解决方案 - 完美支持页面内滚动容器的完整截取**
 
@@ -128,7 +128,8 @@ ScrollSnap 是专门为解决这个问题而生的工具，它能：
 ### 1. 弹出窗口
 
 <div align="center">
-<img src="docs/popup.png" alt="扩展弹出窗口" width="300"/>
+<!-- 截图待添加 -->
+<!-- <img src="docs/popup.png" alt="扩展弹出窗口" width="300"/> -->
 </div>
 
 *点击浏览器工具栏图标，选择截图模式和参数。*
@@ -136,7 +137,8 @@ ScrollSnap 是专门为解决这个问题而生的工具，它能：
 ### 2. 手动选择区域
 
 <div align="center">
-<img src="docs/manual-selection.png" alt="手动选择区域" width="600"/>
+<!-- 截图待添加 -->
+<!-- <img src="docs/manual-selection.png" alt="手动选择区域" width="600"/> -->
 </div>
 
 *按住鼠标拖拽选择截图区域，实时显示尺寸。*
@@ -144,7 +146,8 @@ ScrollSnap 是专门为解决这个问题而生的工具，它能：
 ### 3. 滚动区域识别
 
 <div align="center">
-<img src="docs/scrollable-region.png" alt="滚动区域" width="600"/>
+<!-- 截图待添加 -->
+<!-- <img src="docs/scrollable-region.png" alt="滚动区域" width="600"/> -->
 </div>
 
 *自动识别可滚动元素，蓝色边框高亮显示。*

@@ -684,6 +684,16 @@ function enableRegionSelector() {
   // 当前高亮的元素
   let currentHighlighted = null;
   
+  // 添加全局光标样式
+  const cursorStyle = document.createElement('style');
+  cursorStyle.id = 'screenshot-region-cursor-style';
+  cursorStyle.textContent = `
+    * {
+      cursor: crosshair !important;
+    }
+  `;
+  document.head.appendChild(cursorStyle);
+  
   // 鼠标移动事件 - 高亮可滚动元素
   const mouseMoveHandler = (e) => {
     const element = document.elementFromPoint(e.clientX, e.clientY);
@@ -691,6 +701,7 @@ function enableRegionSelector() {
     // 移除之前的高亮
     if (currentHighlighted) {
       currentHighlighted.style.outline = '';
+      currentHighlighted.style.cursor = '';
     }
     
     // 查找最近的可滚动父元素
@@ -699,6 +710,7 @@ function enableRegionSelector() {
       if (isScrollable(scrollableParent, true)) {  // 启用调试模式
         scrollableParent.style.outline = '3px solid #2196F3';
         scrollableParent.style.outlineOffset = '2px';
+        scrollableParent.style.cursor = 'crosshair';
         currentHighlighted = scrollableParent;
         
         // 更新提示信息
@@ -809,6 +821,13 @@ function enableRegionSelector() {
     
     if (currentHighlighted) {
       currentHighlighted.style.outline = '';
+      currentHighlighted.style.cursor = '';
+    }
+    
+    // 移除全局光标样式
+    const styleEl = document.getElementById('screenshot-region-cursor-style');
+    if (styleEl) {
+      styleEl.remove();
     }
     
     overlay.remove();
