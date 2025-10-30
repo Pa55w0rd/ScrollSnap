@@ -123,37 +123,6 @@ ScrollSnap 是专门为解决这个问题而生的工具，它能：
 
 ---
 
-## 📸 截图预览
-
-### 1. 弹出窗口
-
-<div align="center">
-<!-- 截图待添加 -->
-<!-- <img src="docs/popup.png" alt="扩展弹出窗口" width="300"/> -->
-</div>
-
-*点击浏览器工具栏图标，选择截图模式和参数。*
-
-### 2. 手动选择区域
-
-<div align="center">
-<!-- 截图待添加 -->
-<!-- <img src="docs/manual-selection.png" alt="手动选择区域" width="600"/> -->
-</div>
-
-*按住鼠标拖拽选择截图区域，实时显示尺寸。*
-
-### 3. 滚动区域识别
-
-<div align="center">
-<!-- 截图待添加 -->
-<!-- <img src="docs/scrollable-region.png" alt="滚动区域" width="600"/> -->
-</div>
-
-*自动识别可滚动元素，蓝色边框高亮显示。*
-
----
-
 ## 🚀 安装使用
 
 ### 方法 1：从源代码安装（开发者）

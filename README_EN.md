@@ -144,37 +144,6 @@ Result: One complete product detail image for comparison and sharing
 
 ---
 
-## 📸 Screenshots
-
-### 1. Popup Window
-
-<div align="center">
-<!-- Screenshots coming soon -->
-<!-- <img src="docs/popup.png" alt="Extension Popup" width="300"/> -->
-</div>
-
-*Click the extension icon to select mode and parameters.*
-
-### 2. Manual Selection Mode
-
-<div align="center">
-<!-- Screenshots coming soon -->
-<!-- <img src="docs/manual-selection.png" alt="Manual Selection" width="600"/> -->
-</div>
-
-*Drag to select screenshot area with real-time size display.*
-
-### 3. Scrollable Region Detection
-
-<div align="center">
-<!-- Screenshots coming soon -->
-<!-- <img src="docs/scrollable-region.png" alt="Scrollable Region" width="600"/> -->
-</div>
-
-*Auto-detect scrollable elements with blue highlight.*
-
----
-
 ## 🚀 Installation
 
 ### Method 1: Install from Source (Developers)
