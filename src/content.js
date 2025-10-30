@@ -745,7 +745,7 @@ function enableRegionSelector(format = 'png', quality = 0.9) {
     // 查找最近的可滚动父元素
     let scrollableParent = element;
     while (scrollableParent && scrollableParent !== document.body) {
-      if (isScrollable(scrollableParent, true)) {  // 启用调试模式
+      if (isScrollable(scrollableParent)) {  // 与clickHandler保持一致
         currentHighlighted = scrollableParent;
         
         // 获取元素位置并显示高亮框
