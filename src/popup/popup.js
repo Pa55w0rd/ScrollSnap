@@ -1,4 +1,35 @@
 /**
+ * 检测 content script 是否已加载
+ * @param {number} tabId - 标签页 ID
+ * @returns {Promise<boolean>} 是否已加载
+ */
+async function checkContentScriptLoaded(tabId) {
+    return new Promise((resolve) => {
+        chrome.tabs.sendMessage(tabId, { action: 'ping' }, (response) => {
+            if (chrome.runtime.lastError) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+}
+
+/**
+ * 显示友好的错误提示
+ * @param {string} message - 错误消息
+ */
+function showConnectionError() {
+    const errorMsg = '⚠️ 无法连接到页面\n\n' +
+                    '这通常是因为：\n' +
+                    '1. 刚安装或更新了扩展\n' +
+                    '2. 页面还没有刷新\n\n' +
+                    '请刷新页面后重试！\n\n' +
+                    '快捷键：F5 或 Ctrl+R (Mac: Cmd+R)';
+    alert(errorMsg);
+}
+
+/**
  * 初始化UI元素
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,6 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // 获取当前标签页
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+            // 检查 content script 是否已加载
+            const isLoaded = await checkContentScriptLoaded(tab.id);
+            if (!isLoaded) {
+                showConnectionError();
+                return;
+            }
+
             if (captureMode === 'region') {
                 // 滚动区域选择模式
                 chrome.tabs.sendMessage(tab.id, {
@@ -83,6 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     format,
                     quality
                 }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        showConnectionError();
+                        return;
+                    }
                     if (response && response.received) {
                         // 关闭 popup，让用户可以选择区域
                         window.close();
@@ -97,6 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     format,
                     quality
                 }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        showConnectionError();
+                        return;
+                    }
                     if (response && response.received) {
                         // 关闭 popup，让用户可以选择区域
                         window.close();
@@ -114,6 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     format,
                     quality
                 }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        progressContainer.style.display = 'none';
+                        captureButton.disabled = false;
+                        showConnectionError();
+                        return;
+                    }
                     if (response && response.received) {
                         updateProgress(50, '正在截图...');
                         setTimeout(() => {
@@ -139,6 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     format,
                     quality
                 }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        progressContainer.style.display = 'none';
+                        captureButton.disabled = false;
+                        showConnectionError();
+                        return;
+                    }
                     if (response && response.received) {
                         updateProgress(50, chrome.i18n.getMessage('capturingStatus'));
                         // 截图完成后会自动关闭
