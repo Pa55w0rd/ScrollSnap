@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 320px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+}
+
+.container {
+    padding: 16px;
+}
+
+h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #2196F3;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.setting-item label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.setting-item select,
+.setting-item input[type="range"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.setting-item select:hover,
+.setting-item select:focus {
+    border-color: #2196F3;
+}
+
+.setting-item input[type="range"] {
+    padding: 0;
+    cursor: pointer;
+}
+
+#quality-value {
+    font-size: 13px;
+    color: #666;
+    text-align: right;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+    outline: none;
+}
+
+.primary-btn:hover {
+    background: #1976D2;
+}
+
+.primary-btn:active {
+    background: #1565C0;
+    transform: scale(0.98);
+}
+
+.primary-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.progress-container {
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2196F3, #1976D2);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+

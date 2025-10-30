@@ -1,0 +1,119 @@
+---
+description: 局部滚动区域截图功能需求和实现方案
+---
+
+# 局部滚动区域截图功能
+
+## 问题描述
+
+当前 Chrome 扩展只支持整页滚动截图（`window.scrollTo`），无法处理页面内局部 div 的滚动区域，例如：
+- 聊天窗口消息区域
+- 表格滚动内容
+- 模态对话框内的滚动区域
+- 侧边栏内容
+
+## 使用场景示例
+
+```html
+<div class="chat-container" style="height: 500px; overflow-y: scroll;">
+  <!-- 大量聊天消息，内容高度超过 500px -->
+</div>
+```
+
+## 技术挑战
+
+### 1. 当前实现的局限
+- [src/content.js](mdc:src/content.js) 中的 `captureFullPage()` 只处理 `window` 级别滚动
+- `chrome.tabs.captureVisibleTab` 只能截取整个视口，无法单独截取某个元素
+- 无法检测和识别页面中的滚动容器
+
+### 2. 需要解决的问题
+- 如何检测页面中所有可滚动元素
+- 如何让用户选择目标滚动区域
+- 如何只截取特定元素而不是整个视口
+- 如何处理滚动容器的 `overflow: hidden/scroll/auto`
+- 如何保存和恢复原始滚动状态
+
+## 实现方案
+
+### 使用 html2canvas 库（已实现）
+
+html2canvas 可以渲染特定 DOM 元素为 Canvas：
+
+```javascript
+/**
+ * 截取局部滚动区域
+ * @param {HTMLElement} scrollContainer - 滚动容器元素
+ */
+async function captureScrollableElement(scrollContainer) {
+  // 1. 保存原始样式和滚动位置
+  const originalOverflow = scrollContainer.style.overflow;
+  const originalScrollTop = scrollContainer.scrollTop;
+  
+  // 2. 展开容器显示完整内容
+  scrollContainer.style.overflow = 'visible';
+  scrollContainer.style.maxHeight = 'none';
+  scrollContainer.style.height = 'auto';
+  
+  // 3. 使用 html2canvas 截图
+  const canvas = await html2canvas(scrollContainer, {
+    allowTaint: true,
+    useCORS: true,
+    scrollY: 0,
+    scrollX: 0,
+    width: scrollWidth,
+    height: scrollHeight,
+    backgroundColor: '#ffffff'
+  });
+  
+  // 4. 恢复原始样式和位置
+  scrollContainer.style.overflow = originalOverflow;
+  scrollContainer.scrollTop = originalScrollTop;
+  
+  // 5. 下载图片
+  const dataUrl = canvas.toDataURL('image/png', quality);
+  // ... 发送到 background script 下载
+}
+```
+
+### 区域选择器（已实现）
+
+```javascript
+function enableRegionSelector() {
+  // 创建半透明遮罩层
+  // 鼠标悬停高亮可滚动元素（蓝色边框）
+  // 点击选择并开始截图
+  // ESC 键取消
+}
+```
+
+## UI 改进（已实现）
+
+### 在 [src/popup/popup.html](mdc:src/popup/popup.html) 中添加选项
+
+```html
+<div class="setting-item">
+  <label for="capture-mode">截图模式</label>
+  <select id="capture-mode">
+    <option value="fullpage">完整页面</option>
+    <option value="region">选择区域</option>
+  </select>
+</div>
+```
+
+## 已知限制
+
+1. **虚拟滚动**：使用虚拟滚动技术的列表可能无法完整截取
+2. **动态内容**：实时更新的内容可能在截图过程中变化
+3. **嵌套滚动**：多层嵌套的滚动容器需要特殊处理
+4. **CSS 变换**：使用 transform 的滚动可能无法正确处理
+
+## 测试用例
+
+需要测试的页面类型：
+- [x] 固定高度的 div 滚动
+- [ ] 聊天应用（如 Mira 网站）
+- [ ] 数据表格
+- [ ] 模态对话框内的滚动
+- [ ] 嵌套滚动容器
+- [ ] 使用 flexbox 布局的滚动区域

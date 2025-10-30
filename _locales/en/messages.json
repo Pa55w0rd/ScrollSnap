@@ -1,0 +1,55 @@
+{
+   "captureComplete": {
+      "description": "Screenshot completed status text",
+      "message": "Screenshot completed!"
+   },
+   "captureError": {
+      "description": "Screenshot failed status text",
+      "message": "Screenshot failed, please try again"
+   },
+   "captureMode": {
+      "description": "Screenshot mode selection label",
+      "message": "Screenshot Mode"
+   },
+   "captureModeFullPage": {
+      "description": "Full page screenshot mode",
+      "message": "Full Page"
+   },
+   "captureModeRegion": {
+      "description": "Scrollable region screenshot mode",
+      "message": "Scrollable Region"
+   },
+   "captureModeVisible": {
+      "description": "Current visible page screenshot mode",
+      "message": "Current Visible Page"
+   },
+   "captureModeManual": {
+      "description": "Manual selection region screenshot mode",
+      "message": "Manual Selection"
+   },
+   "capturingStatus": {
+      "description": "Screenshot in progress status text",
+      "message": "Taking screenshot..."
+   },
+   "extDescription": {
+      "description": "Extension description",
+      "message": "Professional scrollable region screenshot tool. Smart detection and complete capture of chat history, comment lists, code editors and other scrollable containers. Supports 4 modes: scrollable region, full page, visible area, manual selection."
+   },
+   "extName": {
+      "description": "Extension name",
+      "message": "ScrollSnap - Scrollable Screenshot"
+   },
+   "imageFormat": {
+      "description": "Image format selection label",
+      "message": "Image Format"
+   },
+   "imageQuality": {
+      "description": "Image quality selection label",
+      "message": "Image Quality"
+   },
+   "startCapture": {
+      "description": "Start screenshot button text",
+      "message": "Start Screenshot"
+   }
+}
+

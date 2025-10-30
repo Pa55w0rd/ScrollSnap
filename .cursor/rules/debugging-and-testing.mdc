@@ -1,0 +1,81 @@
+---
+description: 调试和测试 Chrome 扩展的指南
+---
+
+# 调试和测试指南
+
+## Chrome 扩展调试
+
+### 加载扩展
+1. 打开 `chrome://extensions/`
+2. 开启"开发者模式"
+3. 点击"加载已解压的扩展程序"
+4. 选择项目根目录
+
+### 调试不同部分
+
+#### Service Worker ([src/background.js](mdc:src/background.js))
+- 在 `chrome://extensions/` 点击 "Service Worker" 链接
+- 使用 `console.log()` 查看日志
+- 注意：Service Worker 可能随时被终止
+
+#### Content Script ([src/content.js](mdc:src/content.js))
+- 在目标页面打开开发者工具（F12）
+- Console 标签可以看到 content script 的日志
+- Sources 标签可以设置断点调试
+
+#### Popup ([src/popup/](mdc:src/popup/))
+- 右键点击扩展图标，选择"检查弹出窗口"
+- 会打开专门的开发者工具
+- 关闭弹出窗口会重置状态
+
+### 常见问题排查
+
+#### 消息无法传递
+- 检查 `sendResponse` 是否被调用
+- 确认异步操作有 `return true`
+- 验证消息格式和 action 名称匹配
+
+#### 截图失败
+- 检查 `activeTab` 权限是否正确
+- 查看是否有 CORS 限制
+- 确认页面完全加载后再截图
+
+#### 样式问题
+- 使用 Shadow DOM 隔离进度条样式
+- 检查 z-index 层级
+- 验证 CSS 选择器是否正确
+
+## 测试场景
+
+### 必测页面类型
+1. **短页面**：高度小于一屏
+2. **长页面**：需要多次滚动
+3. **超长页面**：触发 Canvas 分段（>32767px）
+4. **有固定元素的页面**：fixed header/footer
+5. **复杂布局页面**：sticky 元素、绝对定位
+6. **局部滚动区域**：聊天窗口、表格、侧边栏
+
+### 边界情况
+- 空白页面
+- iframe 嵌套页面
+- 动态加载内容页面（懒加载图片）
+- 高分辨率显示器（devicePixelRatio > 1）
+- 跨域图片较多的页面
+
+### 性能测试
+- 监控内存使用（Chrome Task Manager）
+- 测试大页面截图时间
+- 验证内存是否正确释放
+- 多次连续截图测试稳定性
+
+## 发布前检查清单
+
+- [ ] 所有功能正常工作
+- [ ] 没有 console.error 或警告
+- [ ] 图标文件完整且尺寸正确
+- [ ] manifest.json 格式正确
+- [ ] 本地化消息完整
+- [ ] 版本号已更新
+- [ ] 在不同网站测试过
+- [ ] 代码已压缩优化（如需要）

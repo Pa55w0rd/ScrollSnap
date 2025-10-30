@@ -1,0 +1,62 @@
+---
+globs: *.js
+---
+
+# JavaScript 编码规范
+
+## 代码风格
+
+### 注释规范
+- 使用 JSDoc 风格注释函数和重要代码块
+- 函数必须包含说明和参数描述
+- 示例：
+```javascript
+/**
+ * 函数功能说明
+ * @param {type} paramName - 参数说明
+ * @returns {type} 返回值说明
+ */
+```
+
+### 命名规范
+- 使用驼峰命名法（camelCase）作为变量和函数名
+- 常量使用全大写和下划线（UPPER_SNAKE_CASE）
+- 私有变量/函数使用下划线前缀（_functionName）
+
+### 异步处理
+- 优先使用 async/await 而不是 Promise.then()
+- 必须使用 try-catch 处理异步错误
+- 避免回调地狱，使用 Promise 链或 async/await
+
+### 错误处理
+- 所有可能失败的操作必须有错误处理
+- 使用 console.error() 记录错误信息
+- 向用户显示友好的错误提示
+
+## Chrome Extension 特定规则
+
+### 消息传递
+- 使用 `chrome.runtime.onMessage.addListener` 监听消息
+- 异步响应必须 `return true` 保持消息通道开放
+- 示例：
+```javascript
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'something') {
+    doAsyncWork().then(result => {
+      sendResponse({ success: true, data: result });
+    });
+    return true; // 保持通道开放
+  }
+});
+```
+
+### 内存管理
+- Canvas 操作完成后及时清理（设置 width/height 为 1）
+- 避免创建过大的 Canvas（最大 32767px 高度）
+- 处理大数据时注意内存限制（MAX_CANVAS_PIXELS）
+
+### 最佳实践
+- 使用 `chrome.storage.local` 存储用户设置
+- 使用 `chrome.tabs.captureVisibleTab` 进行截图
+- 使用 `chrome.downloads.download` 下载文件
+- Service Worker 中避免使用全局变量（可能被清理）

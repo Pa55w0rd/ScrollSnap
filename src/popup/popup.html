@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <h1></h1>
+        <div class="settings">
+            <div class="setting-item">
+                <label for="capture-mode" data-i18n="captureMode"></label>
+                <select id="capture-mode">
+                    <option value="fullpage" data-i18n-option="captureModeFullPage"></option>
+                    <option value="visible" data-i18n-option="captureModeVisible"></option>
+                    <option value="manual" data-i18n-option="captureModeManual"></option>
+                    <option value="region" data-i18n-option="captureModeRegion"></option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label for="format" data-i18n="imageFormat"></label>
+                <select id="format">
+                    <option value="png">PNG</option>
+                    <option value="jpeg">JPEG</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label for="quality" data-i18n="imageQuality"></label>
+                <input type="range" id="quality" min="1" max="100" value="90">
+                <span id="quality-value">90%</span>
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="capture" class="primary-btn" data-i18n="startCapture"></button>
+        </div>
+        <div id="progress" class="progress-container" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text" data-i18n="capturingStatus"></div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
+

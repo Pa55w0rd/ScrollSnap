@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+
+# 项目总览
+
+这是一个用于截取完整网页长图的 Chrome 扩展程序（Manifest V3）。
+
+## 项目结构
+
+### 核心文件
+- [manifest.json](mdc:manifest.json) - 扩展程序配置清单
+- [src/background.js](mdc:src/background.js) - Service Worker 后台脚本，处理消息、截图API和下载
+- [src/content.js](mdc:src/content.js) - 内容脚本，负责网页截图的核心逻辑
+- [src/popup/popup.html](mdc:src/popup/popup.html) - 弹出窗口HTML
+- [src/popup/popup.js](mdc:src/popup/popup.js) - 弹出窗口逻辑
+- [src/popup/popup.css](mdc:src/popup/popup.css) - 弹出窗口样式
+
+### 资源文件
+- `assets/icons/` - 扩展图标（16x16, 48x48, 128x128）
+- `src/lib/html2canvas.min.js` - 用于网页截图的第三方库
+- `_locales/zh_CN/messages.json` - 中文本地化消息
+
+## 主要功能
+
+1. **网页截图**：截取完整网页内容，包括超长页面
+2. **格式选择**：支持 PNG 和 JPEG 格式
+3. **质量调节**：可调整图片质量（1-100%）
+4. **自动分段**：超大页面自动分段处理，避免 Canvas 限制
+5. **固定元素处理**：智能处理页面中的 fixed/sticky 元素
+6. **进度显示**：使用 Shadow DOM 显示截图进度
+7. **局部滚动区域截图**：支持截取页面中特定的滚动容器
+
+## 技术特点
+
+- Manifest V3 架构
+- Service Worker 替代传统 background script
+- 使用 Chrome Extension APIs（tabs, downloads, storage, activeTab）
+- Shadow DOM 隔离进度条样式
+- 自动重试机制处理截图失败
+- 内存优化和 Canvas 限制处理
+- html2canvas 库实现局部区域渲染
