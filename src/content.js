@@ -163,7 +163,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   } else if (message.action === 'enableRegionSelector') {
     // 启用滚动区域选择模式
     sendResponse({ received: true });
-    enableRegionSelector();
+    enableRegionSelector(message.format, message.quality);
   } else if (message.action === 'captureScrollableElement') {
     // 截取指定的可滚动元素
     sendResponse({ received: true });
@@ -646,7 +646,12 @@ function findScrollableElements() {
 /**
  * 启用可视化区域选择器
  */
-function enableRegionSelector() {
+/**
+ * 启用滚动区域选择模式
+ * @param {string} format - 图片格式 ('png' 或 'jpeg')
+ * @param {number} quality - 图片质量 (0-1)
+ */
+function enableRegionSelector(format = 'png', quality = 0.9) {
   // 如果已经在选择模式，不重复创建
   if (window._regionSelectorActive) {
     return;
@@ -696,15 +701,15 @@ function enableRegionSelector() {
   // 创建高亮矩形框（在遮罩层上方绘制）
   const highlightBox = document.createElement('div');
   highlightBox.id = 'screenshot-region-highlight-box';
-  highlightBox.style.cssText = `
-    position: fixed;
-    border: 4px solid #00ff00;
-    box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #000, 0 0 20px #00ff00;
-    pointer-events: none;
-    z-index: 2147483647;
-    display: none;
-  `;
+  highlightBox.style.position = 'fixed';
+  highlightBox.style.border = '5px solid #00ff00';
+  highlightBox.style.boxShadow = '0 0 0 3px #000, inset 0 0 0 3px #000, 0 0 30px #00ff00';
+  highlightBox.style.pointerEvents = 'none';
+  highlightBox.style.zIndex = '2147483647';
+  highlightBox.style.display = 'none';
+  highlightBox.style.backgroundColor = 'transparent';
   document.body.appendChild(highlightBox);
+  console.log('[Content] 高亮框已创建');
   
   document.body.appendChild(overlay);
   document.body.appendChild(tooltip);
@@ -745,11 +750,19 @@ function enableRegionSelector() {
         
         // 获取元素位置并显示高亮框
         const rect = scrollableParent.getBoundingClientRect();
+        const borderWidth = 5; // 边框宽度
         highlightBox.style.display = 'block';
-        highlightBox.style.left = rect.left + 'px';
-        highlightBox.style.top = rect.top + 'px';
-        highlightBox.style.width = rect.width + 'px';
-        highlightBox.style.height = rect.height + 'px';
+        highlightBox.style.left = (rect.left - borderWidth) + 'px';
+        highlightBox.style.top = (rect.top - borderWidth) + 'px';
+        highlightBox.style.width = (rect.width) + 'px';
+        highlightBox.style.height = (rect.height) + 'px';
+        
+        console.log('[Content] 显示高亮框:', {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height
+        });
         
         // 更新提示信息
         const scrollInfo = scrollableParent.scrollHeight > scrollableParent.clientHeight 
@@ -813,8 +826,8 @@ function enableRegionSelector() {
         // 清理
         cleanup();
         
-        // 开始截图
-        captureScrollableElement(scrollableParent)
+        // 开始截图（使用传入的格式和质量参数）
+        captureScrollableElement(scrollableParent, format, quality)
           .catch(error => {
             console.error('[Content] 截图失败:', error);
             alert('截图失败: ' + error.message);
