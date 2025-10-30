@@ -132,13 +132,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // 立即返回响应，避免消息通道超时
     sendResponse({ received: true });
     
-    captureFullPage()
-      .then(() => {
-        console.log('截图完成');
-      })
-      .catch(error => {
-        console.error('截图失败:', error);
-      });
+    // 从 storage 获取格式设置
+    chrome.storage.local.get(['format', 'quality'], (result) => {
+      const format = result.format || 'png';
+      const quality = (result.quality || 90) / 100;
+      
+      captureFullPage(format, quality)
+        .then(() => {
+          console.log('截图完成');
+        })
+        .catch(error => {
+          console.error('截图失败:', error);
+        });
+    });
   } else if (message.action === 'captureVisible') {
     // 截取当前可见页面
     sendResponse({ received: true });
@@ -262,8 +268,10 @@ const getFixedElements = (progressContainer) => {
 
 /**
  * 截取整个页面
+ * @param {string} format - 图片格式 ('png' 或 'jpeg')
+ * @param {number} quality - 图片质量 (0-1)
  */
-async function captureFullPage() {
+async function captureFullPage(format = 'png', quality = 0.9) {
   if (window._isCapturing) {
     console.log('截图进行中，请稍候...');
     return;
@@ -466,15 +474,16 @@ async function captureFullPage() {
     });
 
     // 生成最终图片（可能需要多个文件）
+    const mimeType = format === 'jpeg' ? 'image/jpeg' : 'image/png';
     for (let i = 0; i < canvasSegments.length; i++) {
-      const dataUrl = canvasSegments[i].toDataURL('image/png');
+      const dataUrl = canvasSegments[i].toDataURL(mimeType, quality);
       
       // 发送到后台进行下载
       await new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({
           action: 'downloadCapture',
           dataUrl: dataUrl,
-          format: 'png',
+          format: format,
           suffix: canvasSegments.length > 1 ? `_part${i + 1}` : ''
         }, response => {
           if (response && response.success) {
@@ -666,7 +675,7 @@ function enableRegionSelector() {
   tooltip.id = 'screenshot-region-selector-tooltip';
   tooltip.innerHTML = `
     <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 区域截图模式</div>
-    <div style="font-size: 14px;">移动鼠标找到可滚动区域（会显示蓝色边框）</div>
+    <div style="font-size: 14px;">移动鼠标找到可滚动区域，提示会变成"✅"</div>
     <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">按 ESC 取消</div>
   `;
   tooltip.style.cssText = `
@@ -707,7 +716,11 @@ function enableRegionSelector() {
     
     // 移除之前的高亮
     if (currentHighlighted) {
+      currentHighlighted.style.boxShadow = '';
       currentHighlighted.style.outline = '';
+      currentHighlighted.style.outlineOffset = '';
+      currentHighlighted.style.position = '';
+      currentHighlighted.style.zIndex = '';
       currentHighlighted.style.cursor = '';
     }
     
@@ -715,8 +728,12 @@ function enableRegionSelector() {
     let scrollableParent = element;
     while (scrollableParent && scrollableParent !== document.body) {
       if (isScrollable(scrollableParent, true)) {  // 启用调试模式
+        // 使用 box-shadow 替代 outline，确保在遮罩层上方可见
+        scrollableParent.style.boxShadow = '0 0 0 4px #2196F3, inset 0 0 0 4px #2196F3';
         scrollableParent.style.outline = '3px solid #2196F3';
         scrollableParent.style.outlineOffset = '2px';
+        scrollableParent.style.position = 'relative';
+        scrollableParent.style.zIndex = '2147483647';
         scrollableParent.style.cursor = `url('${cursorSvg}') 24 24, crosshair`;
         currentHighlighted = scrollableParent;
         
@@ -737,7 +754,7 @@ function enableRegionSelector() {
     if (!scrollableParent || scrollableParent === document.body) {
       tooltip.innerHTML = `
         <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">📷 区域截图模式</div>
-        <div style="font-size: 14px;">移动鼠标找到可滚动区域（会显示蓝色边框）</div>
+        <div style="font-size: 14px;">移动鼠标找到可滚动区域，提示会变成"✅"</div>
         <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">按 ESC 取消</div>
       `;
     }
@@ -827,7 +844,11 @@ function enableRegionSelector() {
     window._regionSelectorActive = false;
     
     if (currentHighlighted) {
+      currentHighlighted.style.boxShadow = '';
       currentHighlighted.style.outline = '';
+      currentHighlighted.style.outlineOffset = '';
+      currentHighlighted.style.position = '';
+      currentHighlighted.style.zIndex = '';
       currentHighlighted.style.cursor = '';
     }
     
