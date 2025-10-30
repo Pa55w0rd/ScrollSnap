@@ -644,25 +644,8 @@ function enableRegionSelector() {
   }
   window._regionSelectorActive = true;
   
-  // 创建自定义光标 SVG - 更大更醒目
-  const cursorSvg = `data:image/svg+xml;base64,${btoa(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-      <!-- 黑色描边 - 更粗 -->
-      <line x1="24" y1="2" x2="24" y2="16" stroke="black" stroke-width="5"/>
-      <line x1="24" y1="32" x2="24" y2="46" stroke="black" stroke-width="5"/>
-      <line x1="2" y1="24" x2="16" y2="24" stroke="black" stroke-width="5"/>
-      <line x1="32" y1="24" x2="46" y2="24" stroke="black" stroke-width="5"/>
-      <!-- 白色十字 - 更粗 -->
-      <line x1="24" y1="2" x2="24" y2="16" stroke="white" stroke-width="3"/>
-      <line x1="24" y1="32" x2="24" y2="46" stroke="white" stroke-width="3"/>
-      <line x1="2" y1="24" x2="16" y2="24" stroke="white" stroke-width="3"/>
-      <line x1="32" y1="24" x2="46" y2="24" stroke="white" stroke-width="3"/>
-      <!-- 中心圆 - 更大 -->
-      <circle cx="24" cy="24" r="5" fill="white" stroke="black" stroke-width="3"/>
-      <!-- 中心点 -->
-      <circle cx="24" cy="24" r="2" fill="#2196F3"/>
-    </svg>
-  `)}`;
+  // 创建自定义光标 SVG - 移除注释，避免编码问题
+  const cursorSvg = `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><line x1="24" y1="2" x2="24" y2="16" stroke="black" stroke-width="5"/><line x1="24" y1="32" x2="24" y2="46" stroke="black" stroke-width="5"/><line x1="2" y1="24" x2="16" y2="24" stroke="black" stroke-width="5"/><line x1="32" y1="24" x2="46" y2="24" stroke="black" stroke-width="5"/><line x1="24" y1="2" x2="24" y2="16" stroke="white" stroke-width="3"/><line x1="24" y1="32" x2="24" y2="46" stroke="white" stroke-width="3"/><line x1="2" y1="24" x2="16" y2="24" stroke="white" stroke-width="3"/><line x1="32" y1="24" x2="46" y2="24" stroke="white" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="white" stroke="black" stroke-width="3"/><circle cx="24" cy="24" r="2" fill="#2196F3"/></svg>')}`;
   
   // 创建遮罩层
   const overlay = document.createElement('div');
