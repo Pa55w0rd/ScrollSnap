@@ -730,7 +730,13 @@ function enableRegionSelector(format = 'png', quality = 0.9) {
   
   // 鼠标移动事件 - 高亮可滚动元素
   const mouseMoveHandler = (e) => {
+    // 临时隐藏遮罩层和高亮框，获取真实的页面元素
+    overlay.style.display = 'none';
+    highlightBox.style.display = 'none';
     const element = document.elementFromPoint(e.clientX, e.clientY);
+    overlay.style.display = '';
+    
+    console.log('[Content] 鼠标移动到元素:', element?.tagName, element?.className);
     
     // 移除之前的高亮
     if (currentHighlighted) {
